@@ -1,5 +1,6 @@
 package com.example.demo.domain.services.interfaces;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +15,7 @@ public interface FuncionarioDomainService {
 	
 	FuncionarioResponseDto excluir(UUID id);
 	
-	List<FuncionarioResponseDto> consultar();
+	List<FuncionarioResponseDto> consultar(Date dataMin, Date dataMax);
 	
 	FuncionarioResponseDto consultarPorId(UUID id);
 }
