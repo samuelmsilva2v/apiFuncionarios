@@ -1,0 +1,31 @@
+networks:
+ apifuncionarios-network:
+  driver: bridge
+
+services:
+ apifuncionarios:
+  build:
+   context: .
+   dockerfile: Dockerfile
+  ports:
+   - "8085:8085"
+  networks:
+   - apifuncionarios-network
+  depends_on:
+   - mongodb
+   - rabbitmq
+
+ mongodb:
+  image: mongo:latest
+  ports:
+   - "27017:27017"
+  networks:
+   - apifuncionarios-network
+ 
+ rabbitmq:
+  image: rabbitmq:3-management
+  ports:
+   - "5672:5672"
+   - "15672:15672"
+  networks:
+   - apifuncionarios-network
