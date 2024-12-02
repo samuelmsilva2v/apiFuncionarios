@@ -13,6 +13,7 @@ import com.example.demo.domain.models.dtos.FuncionarioRequestDto;
 import com.example.demo.domain.models.dtos.FuncionarioResponseDto;
 import com.example.demo.domain.models.entities.Funcionario;
 import com.example.demo.domain.services.interfaces.FuncionarioDomainService;
+import com.example.demo.infrastructure.components.MessageProducerComponent;
 import com.example.demo.infrastructure.repositories.FuncionarioRepository;
 
 @Service
@@ -23,6 +24,9 @@ public class FuncionarioDomainServiceImpl implements FuncionarioDomainService {
 
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private MessageProducerComponent messageProducerComponent;
 
 	@Override
 	public FuncionarioResponseDto cadastrar(FuncionarioRequestDto request) {
@@ -31,6 +35,13 @@ public class FuncionarioDomainServiceImpl implements FuncionarioDomainService {
 		funcionario.setId(UUID.randomUUID());
 
 		funcionarioRepository.save(funcionario);
+		
+		try {
+			messageProducerComponent.send(funcionario);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return modelMapper.map(funcionario, FuncionarioResponseDto.class);
 	}
